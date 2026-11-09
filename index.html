@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Тест для аккредитации — 80 вопросов</title>
-<link rel="stylesheet" href="styles.css?v=8">
+<link rel="stylesheet" href="styles.css?v=9">
 </head>
 <body>
 <div id="disclaimer" class="disclaimer-overlay" hidden>
@@ -52,6 +52,21 @@
   </header>
 
   <p id="saveNote" class="save-note" hidden></p>
+
+  <section id="search" class="card search-card">
+    <h2>Поиск ответа по вопросу</h2>
+    <div class="search-row">
+      <input id="searchInput" class="search-input" type="search" autocomplete="off"
+             placeholder="Введите слово из вопроса, например: «консилиум»">
+      <button id="searchClear" class="btn ghost" type="button" hidden>Очистить</button>
+    </div>
+    <label class="search-opt">
+      <input id="searchInOptions" type="checkbox"> искать также в вариантах ответов
+    </label>
+    <p id="searchMeta" class="muted search-meta">Поиск идёт по всем вопросам полного банка. Регистр и буква «ё» не важны; несколько слов — найдутся вопросы, где есть все.</p>
+    <div id="searchResults" class="search-results"></div>
+    <button id="searchMore" class="btn ghost search-more" type="button" hidden>Показать ещё</button>
+  </section>
 
   <section id="start" class="card intro">
     <h2>Как проходит тест</h2>
@@ -206,6 +221,6 @@
 
 </div>
 <script src="questions.js?v=8"></script>
-<script src="app.js?v=8"></script>
+<script src="app.js?v=9"></script>
 </body>
 </html>

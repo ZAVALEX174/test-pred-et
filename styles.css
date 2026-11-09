@@ -215,3 +215,28 @@ a.tag.pdf:hover{color:var(--accent);border-color:var(--accent)}
 body.disclaimer-open{overflow:hidden}
 
 .banks{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+
+/* --- поиск по вопросам --- */
+.search-row{display:flex;gap:10px}
+.search-input{
+  flex:1;min-width:0;font:inherit;color:var(--ink);background:var(--bg);
+  border:1.5px solid var(--line);border-radius:10px;padding:10px 14px;outline:none;
+  transition:border-color .15s
+}
+.search-input:focus{border-color:var(--accent)}
+.search-opt{display:inline-flex;gap:8px;align-items:center;margin-top:10px;font-size:14px;color:var(--muted);cursor:pointer}
+.search-meta{margin:10px 0 0}
+.search-results{display:flex;flex-direction:column;gap:12px;margin-top:12px}
+.search-results:empty{display:none}
+.sr-item{border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.sr-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px}
+.sr-stem{font-weight:600;margin:0 0 10px;white-space:pre-line}
+.sr-opts{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px}
+.sr-opts li{display:flex;gap:10px;align-items:flex-start;font-size:14.5px;padding:7px 10px;border-radius:8px;color:var(--muted)}
+.sr-opts li .idx{flex:0 0 auto;width:22px;height:22px;border-radius:6px;border:1.5px solid var(--line);display:grid;place-items:center;font-size:12px;font-weight:700}
+.sr-opts li.right{background:var(--ok-bg);color:var(--ok-ink);font-weight:600}
+.sr-opts li.right .idx{background:var(--ok-line);border-color:var(--ok-line);color:#fff}
+.sr-note{margin:10px 0 0;font-size:13.5px;color:var(--muted)}
+mark{background:var(--miss-bg);color:inherit;border-bottom:2px solid var(--miss-line);border-radius:3px;padding:0 1px}
+.search-more{margin-top:12px}
+@media (max-width:640px){ .search-row{flex-direction:column} }

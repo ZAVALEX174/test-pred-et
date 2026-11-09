@@ -605,6 +605,119 @@ function fillBankCounts() {
   if (fuP) fuP.textContent = Math.ceil(POOL_FULL.length * PASS_PERCENT / 100);
 }
 
+/* ---------- поиск ответа по слову из вопроса ---------- */
+
+const EXAM_IDS = new Set(POOL_EXAM.map(q => q.id));
+const SEARCH_PAGE = 20;          // сколько результатов показывать за раз
+let searchHits = [], searchWords = [], searchShown = 0;
+
+// Нижний регистр + «ё» → «е». Длина строки не меняется, поэтому позиции совпадений
+// в нормализованном тексте совпадают с позициями в исходном (нужно для подсветки).
+function norm(s) {
+  return String(s).toLowerCase().replace(/ё/g, 'е');
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c =>
+    ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+// Подсветка всех найденных слов через <mark>.
+function highlight(text, words) {
+  text = String(text);
+  const n = norm(text);
+  if (n.length !== text.length || !words.length) return escapeHtml(text);
+  const marks = new Array(text.length).fill(false);
+  for (const w of words) {
+    let from = 0, i;
+    while ((i = n.indexOf(w, from)) !== -1) {
+      for (let k = i; k < i + w.length; k++) marks[k] = true;
+      from = i + w.length;
+    }
+  }
+  let out = '', open = false;
+  for (let k = 0; k < text.length; k++) {
+    if (marks[k] && !open) { out += '<mark>'; open = true; }
+    if (!marks[k] && open) { out += '</mark>'; open = false; }
+    out += escapeHtml(text[k]);
+  }
+  if (open) out += '</mark>';
+  return out;
+}
+
+function runSearch() {
+  const input = el('searchInput');
+  const raw = input.value.trim();
+  const inOptions = el('searchInOptions').checked;
+  el('searchClear').hidden = raw === '';
+
+  searchWords = norm(raw).split(/\s+/).filter(w => w.length >= 2);
+  searchHits = [];
+  searchShown = 0;
+  el('searchResults').innerHTML = '';
+
+  if (!searchWords.length) {
+    el('searchMeta').textContent = raw
+      ? 'Введите хотя бы 2 буквы.'
+      : 'Поиск идёт по всем вопросам полного банка. Регистр и буква «ё» не важны; несколько слов — найдутся вопросы, где есть все.';
+    el('searchMore').hidden = true;
+    return;
+  }
+
+  for (const q of POOL_FULL) {
+    const hay = norm(inOptions ? q.stem + ' ' + q.options.join(' ') : q.stem);
+    if (searchWords.every(w => hay.includes(w))) searchHits.push(q);
+  }
+
+  el('searchMeta').textContent = searchHits.length
+    ? 'Найдено: ' + searchHits.length + ' ' + plural(searchHits.length, 'вопрос', 'вопроса', 'вопросов') + '.'
+    : 'Ничего не найдено' + (inOptions ? '.' : '. Попробуйте отметить «искать также в вариантах ответов» или сократить слово до корня.');
+  showMoreResults();
+}
+
+function showMoreResults() {
+  const box = el('searchResults');
+  const slice = searchHits.slice(searchShown, searchShown + SEARCH_PAGE);
+  for (const q of slice) box.appendChild(searchCard(q));
+  searchShown += slice.length;
+  const more = el('searchMore');
+  more.hidden = searchShown >= searchHits.length;
+  more.textContent = 'Показать ещё (' + (searchHits.length - searchShown) + ')';
+}
+
+function searchCard(q) {
+  const div = document.createElement('div');
+  div.className = 'sr-item';
+  let html = '<div class="sr-head"><span class="qnum">№ ' + q.id + '</span>' +
+    '<span class="tag">' + (EXAM_IDS.has(q.id) ? 'экзаменационный' : 'дополнительный') + '</span>';
+  if (q.multi) html += '<span class="tag multi">Несколько правильных ответов</span>';
+  if (q.page) html += '<a class="tag pdf" href="' + PDF_FILE + '#page=' + q.page +
+    '" target="_blank" rel="noopener">PDF, стр. ' + q.page + ' ↗</a>';
+  html += '</div><p class="sr-stem">' + highlight(q.stem, searchWords) + '</p><ul class="sr-opts">';
+  q.options.forEach((opt, i) => {
+    const right = q.correct.includes(i + 1);
+    html += '<li class="' + (right ? 'right' : '') + '"><span class="idx">' + (i + 1) + '</span><span>' +
+      highlight(opt, searchWords) + (right ? ' ✓' : '') + '</span></li>';
+  });
+  html += '</ul>';
+  if (q.note) html += '<p class="sr-note">' + q.note + '</p>';
+  div.innerHTML = html;
+  return div;
+}
+
+let searchTimer = null;
+el('searchInput').addEventListener('input', () => {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(runSearch, 200);
+});
+el('searchInOptions').addEventListener('change', runSearch);
+el('searchClear').addEventListener('click', () => {
+  el('searchInput').value = '';
+  runSearch();
+  el('searchInput').focus();
+});
+el('searchMore').addEventListener('click', showMoreResults);
+
 /* ---------- события ---------- */
 
 el('begin').addEventListener('click', start);
