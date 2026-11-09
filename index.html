@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Тест для аккредитации — 80 вопросов</title>
+<link rel="stylesheet" href="styles.css?v=8">
+</head>
+<body>
+<div id="disclaimer" class="disclaimer-overlay" hidden>
+  <div class="disclaimer-box" role="dialog" aria-modal="true" aria-labelledby="discTitle">
+    <h2 id="discTitle">Внимание — прочтите перед началом</h2>
+    <div class="disclaimer-text">
+      <p>Это <b>некоммерческое учебное приложение</b>, предназначенное исключительно
+         для <b>личного ознакомления и самоподготовки</b>. Оно не является официальным ресурсом,
+         не связано с Минздравом России, Методическим центром аккредитации или иными организациями
+         и не предназначено для распространения.</p>
+      <p>Лицо, передавшее вам эту папку, <b>не несёт никакой ответственности</b>:</p>
+      <ul>
+        <li>за передачу приложения или его материалов третьим лицам — любое дальнейшее
+            копирование и распространение вы осуществляете по собственной инициативе
+            и под собственную ответственность;</li>
+        <li>за <b>достоверность, полноту и актуальность</b> содержащейся здесь информации,
+            включая формулировки вопросов, отмеченные правильные ответы и пояснения;</li>
+        <li>за любые последствия использования этих материалов, в том числе результаты
+            экзаменов и аккредитации.</li>
+      </ul>
+      <p>Материалы могли устареть с момента подготовки. Перед применением сведений на практике
+         сверяйтесь с действующими редакциями нормативных актов в официальных источниках
+         (pravo.gov.ru, КонсультантПлюс, ГАРАНТ).</p>
+      <p>Нажимая «Согласен», вы подтверждаете, что используете приложение
+         <b>только в личных учебных целях</b> и принимаете перечисленные условия.</p>
+    </div>
+    <button id="acceptDisclaimer" class="btn primary">Согласен</button>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <header class="head">
+    <div class="brand">
+      <span class="mark">✚</span>
+      <div>
+        <h1>База тестовых заданий для аккредитации</h1>
+        <p class="sub">экзаменационный банк 80 вопросов + полный банк 300 · порог сдачи 70% · ответы сверены с 323-ФЗ, 326-ФЗ, 59-ФЗ и приказами Минздрава</p>
+      </div>
+    </div>
+    <div class="head-actions">
+      <a class="btn ghost" href="Notes_260722_102832.pdf#page=1" target="_blank" rel="noopener">Исходный PDF ↗</a>
+      <button id="restart" class="btn ghost" hidden>Начать заново</button>
+    </div>
+  </header>
+
+  <p id="saveNote" class="save-note" hidden></p>
+
+  <section id="start" class="card intro">
+    <h2>Как проходит тест</h2>
+    <ul class="rules">
+      <li>Вопросы выпадают <b>по одному в произвольном порядке</b> и <b>не повторяются</b>: за одно прохождение каждый вопрос выбранного набора встречается ровно один раз.</li>
+      <li>Часть заданий — с <b>несколькими правильными ответами</b>; такие помечены значком и требуют нажать «Ответить».</li>
+      <li>Правильный ответ подсвечивается <span class="chip ok">зелёным</span>, неправильный — <span class="chip bad">красным</span>.</li>
+      <li>Каждый ответ заносится в таблицу результатов внизу страницы.</li>
+      <li>Все вопросы выбранного набора = 100%. Минимальный проходной порог — <b>70%</b>.</li>
+      <li>Любой ответ можно перепроверить по первоисточнику:
+          <a href="Notes_260722_102832.pdf#page=1" target="_blank" rel="noopener">откройте исходный PDF</a>
+          — у каждого вопроса есть ссылка на его страницу (экзаменационные — стр. 1–17, дополнительные — стр. 16–93).</li>
+      <li>Прогресс <b>сохраняется в браузере после каждого ответа</b>: при обрыве интернета, закрытии вкладки
+          или перезагрузке страницы тест продолжится с того же места, а таблица результатов восстановится.</li>
+    </ul>
+
+    <h2 class="levels-title">Набор вопросов</h2>
+    <div class="levels banks">
+      <label class="level">
+        <input type="radio" name="bank" value="exam" checked>
+        <span class="level-body">
+          <span class="level-name">Экзаменационный — <span id="bankExamCount">80</span> вопросов</span>
+          <span class="level-desc">Канонический банк «Вопросы 1–80» (страницы 1–17 исходного PDF). Формат реального экзамена; порог — <span id="bankExamPass">56</span> верных ответов.</span>
+        </span>
+      </label>
+      <label class="level">
+        <input type="radio" name="bank" value="full">
+        <span class="level-body">
+          <span class="level-name">Полный банк — <span id="bankFullCount">300</span> вопросов</span>
+          <span class="level-desc">Экзаменационные 80 плюс все дополнительные вопросы, извлечённые из остальной части PDF (страницы 16–93, без дубликатов). Порог — 70% (<span id="bankFullPass">210</span> верных).</span>
+        </span>
+      </label>
+    </div>
+
+    <h2 class="levels-title">Уровень сложности</h2>
+    <div class="levels" id="levels">
+      <label class="level">
+        <input type="radio" name="level" value="1" checked>
+        <span class="level-body">
+          <span class="level-num">1</span>
+          <span class="level-name">Обычный</span>
+          <span class="level-desc">Без ограничения времени. Варианты ответов идут в исходном порядке.</span>
+        </span>
+      </label>
+      <label class="level">
+        <input type="radio" name="level" value="2">
+        <span class="level-body">
+          <span class="level-num">2</span>
+          <span class="level-name">На время</span>
+          <span class="level-desc">60 минут на весь выбранный набор. Когда время выходит, тест закрывается, а неотвеченные вопросы засчитываются как ошибки.</span>
+        </span>
+      </label>
+      <label class="level">
+        <input type="radio" name="level" value="3">
+        <span class="level-body">
+          <span class="level-num">3</span>
+          <span class="level-name">С перемешиванием</span>
+          <span class="level-desc">Без ограничения времени, но варианты ответов внутри каждого вопроса выводятся в случайном порядке.</span>
+        </span>
+      </label>
+      <label class="level">
+        <input type="radio" name="level" value="4">
+        <span class="level-body">
+          <span class="level-num">4</span>
+          <span class="level-name">Экзамен</span>
+          <span class="level-desc">60 минут и перемешивание вариантов ответов одновременно.</span>
+        </span>
+      </label>
+    </div>
+
+    <button id="begin" class="btn primary">Начать тестирование</button>
+  </section>
+
+  <section id="quiz" class="card" hidden>
+    <div class="bar">
+      <div class="bar-line"><span id="progressFill"></span></div>
+      <div class="bar-meta">
+        <span id="counter">Вопрос 1 из 80</span>
+        <span class="bar-right">
+          <span id="timer" class="timer" hidden></span>
+          <span id="levelBadge" class="tag"></span>
+          <span id="scoreLive">Верно: 0 · Неверно: 0 · 0%</span>
+        </span>
+      </div>
+    </div>
+
+    <div class="qhead">
+      <span class="qnum" id="qnum">№ 1</span>
+      <span class="tag multi" id="multiTag" hidden>Несколько правильных ответов</span>
+      <span class="tag src" id="srcTag" hidden></span>
+      <a class="tag pdf" id="pdfLink" href="Notes_260722_102832.pdf" target="_blank" rel="noopener">PDF, стр. 1 ↗</a>
+    </div>
+
+    <p class="stem" id="stem"></p>
+    <p class="evaluate" id="evaluate" hidden>Оцените верность всех утверждений</p>
+
+    <div class="options" id="options"></div>
+
+    <div class="feedback" id="feedback" hidden></div>
+
+    <div class="actions">
+      <button id="answer" class="btn primary" hidden>Ответить</button>
+      <button id="next" class="btn primary" hidden>Следующий вопрос</button>
+    </div>
+  </section>
+
+  <section id="final" class="card final" hidden>
+    <h2 id="verdict"></h2>
+    <p id="finalNote" class="final-note" hidden></p>
+    <div class="scoreboard">
+      <div class="metric"><span class="value" id="fCorrect">0</span><span class="label">верных</span></div>
+      <div class="metric"><span class="value" id="fWrong">0</span><span class="label">неверных</span></div>
+      <div class="metric big"><span class="value" id="fPercent">0%</span><span class="label">результат</span></div>
+      <div class="metric"><span class="value">70%</span><span class="label">порог</span></div>
+    </div>
+    <div class="final-actions">
+      <button id="again" class="btn primary">Пройти ещё раз</button>
+      <a class="btn ghost" href="Notes_260722_102832.pdf#page=1" target="_blank" rel="noopener">Открыть исходный PDF ↗</a>
+    </div>
+  </section>
+
+  <section class="card table-card">
+    <div class="table-head">
+      <h2>Таблица результатов</h2>
+      <span id="tableMeta" class="muted">Ответов пока нет</span>
+    </div>
+    <div class="table-scroll">
+      <table id="results">
+        <thead>
+          <tr>
+            <th class="c-num">№</th>
+            <th class="c-q">Вопрос</th>
+            <th class="c-a">Ваш ответ</th>
+            <th class="c-r">Правильный ответ</th>
+          </tr>
+        </thead>
+        <tbody id="resultsBody">
+          <tr class="empty"><td colspan="4">Здесь появятся ваши ответы.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer class="foot">
+    Прогресс хранится локально в этом браузере (localStorage) и никуда не отправляется; кнопка «Начать заново» его очищает.
+    Источник вопросов: <a href="Notes_260722_102832.pdf#page=1" target="_blank" rel="noopener"><code>Notes_260722_102832.pdf</code></a>
+    (экзаменационные задания — страницы 1–17, дополнительные — страницы 16–93; файл должен лежать рядом с этой страницей). Ответы, отмеченные в файле жирным шрифтом, перепроверены
+    по действующим редакциям (август 2026) Федеральных законов № 323-ФЗ, № 326-ФЗ, № 59-ФЗ и приказов Минздрава России
+    № 1089н (ред. 31.03.2026), № 404н (ред. 15.06.2026), № 1177н и № 180н от 10.04.2025
+    (порядок работы врачебной комиссии; с 01.09.2025 заменил № 502н). Исправления и пояснения показываются под вопросом после ответа.
+  </footer>
+
+</div>
+<script src="questions.js?v=8"></script>
+<script src="app.js?v=8"></script>
+</body>
+</html>
